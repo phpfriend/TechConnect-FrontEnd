@@ -15,14 +15,14 @@ const NavBar = () => {
       dispatch(removeUser());
       navigate("/login");
     } catch (err) {
-      console.log(err); // ✅ fixed console.log1 typo
+      console.log(err);
     }
   };
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+        <Link to="/feed" className="btn btn-ghost text-xl">
           TechConnect
         </Link>
       </div>
@@ -40,7 +40,18 @@ const NavBar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img alt="User Photo" src={user.photoUrl} />
+                  {user.photoUrl ? (
+                    <img
+                      alt="User Photo"
+                      src={user.photoUrl}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center font-medium text-sm">
+                      {user.firstName?.[0]}
+                      {user.lastName?.[0]}
+                    </div>
+                  )}
                 </div>
               </div>
               <ul
@@ -57,7 +68,7 @@ const NavBar = () => {
                   <Link to="/connections">Connections</Link>
                 </li>
                 <li>
-                  <Link to="/requests">Requests</Link> {/* ✅ fixed route */}
+                  <Link to="/requests">Requests</Link>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>

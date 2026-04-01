@@ -2,33 +2,34 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constant";
 
-const Login = () => {
+const Signup = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     try {
       const res = await axios.post(
-        BASE_URL + "/login", // correct endpoint
+        BASE_URL + "/signUp",
         {
-          emailId: emailId,
-          password: password,
+          firstName,
+          lastName,
+          emailId,
+          password,
         },
-        {
-          withCredentials: true,
-        },
+        { withCredentials: true },
       );
-
       dispatch(addUser(res.data));
       navigate("/feed");
     } catch (err) {
-      setError(err.response.data || "Something went wrong!!");
+      setError(err.response?.data || "Something went wrong!!");
     }
   };
 
@@ -38,11 +39,39 @@ const Login = () => {
         <div className="card-body">
           {/* Title */}
           <h2 className="card-title justify-center text-xl font-semibold">
-            Login
+            Create an account
           </h2>
 
-          {/* Email Field */}
-          <div className="form-control w-full mt-4">
+          {/* First & Last Name */}
+          <div className="flex gap-3 mt-4">
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">First name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="First name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="input input-bordered w-full rounded-md"
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">Last name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Last name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="input input-bordered w-full rounded-md"
+              />
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="form-control w-full mt-2">
             <label className="label">
               <span className="label-text">Email Id</span>
             </label>
@@ -55,7 +84,7 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="form-control w-full mt-2">
             <label className="label">
               <span className="label-text">Password</span>
@@ -69,23 +98,27 @@ const Login = () => {
             />
           </div>
 
+          {/* Error */}
+          <p className="text-red-500 text-sm mt-1">{error}</p>
+
           {/* Button */}
-          <p className="text-red-500">{error}</p>
-          <div className="card-actions justify-center mt-6">
+          <div className="card-actions justify-center mt-4">
             <button
               className="btn btn-primary rounded-md px-6 w-full"
-              onClick={handleLogin}
+              onClick={handleSignup}
             >
-              Login
+              Sign up
             </button>
           </div>
+
+          {/* Login link */}
           <p className="text-center text-sm text-base-content/50 mt-4">
-            New to TechConnect?{" "}
+            Already have an account?{" "}
             <Link
-              to="/signup"
+              to="/login"
               className="text-primary font-medium hover:underline"
             >
-              Create an account
+              Login
             </Link>
           </p>
         </div>
@@ -94,4 +127,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

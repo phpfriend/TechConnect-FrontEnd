@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 
@@ -91,6 +93,8 @@ const Requests = () => {
   const [received, setReceived] = useState([]);
   const [sent, setSent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const requests = useSelector((store) => store.request);
 
   const fetchRequests = async () => {
     try {
@@ -104,6 +108,7 @@ const Requests = () => {
 
       setReceived(receivedRes.data.data || []);
       setSent(sentRes.data.data || []);
+      dispatch(addRequest(receivedRes.data.data));
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -115,6 +120,8 @@ const Requests = () => {
     fetchRequests();
   }, []);
 
+  if (!requests) return null;
+
   const handleAccept = async (requestId) => {
     try {
       await axios.post(
@@ -123,6 +130,7 @@ const Requests = () => {
         { withCredentials: true },
       );
       setReceived((prev) => prev.filter((r) => r._id !== requestId));
+      dispatch(removeRequest(requestId));
     } catch (err) {
       console.log(err.message);
     }
@@ -136,6 +144,7 @@ const Requests = () => {
         { withCredentials: true },
       );
       setReceived((prev) => prev.filter((r) => r._id !== requestId));
+      dispatch(removeRequest(requestId));
     } catch (err) {
       console.log(err.message);
     }
