@@ -1,8 +1,12 @@
 # Stage 1: Build React app
+# frontend/Dockerfile
 FROM node:22.12.0-alpine as build
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+# Install with legacy-peer-deps to bypass conflicts
+RUN npm install --legacy-peer-deps
+
 COPY . .
 RUN npm run build
 
