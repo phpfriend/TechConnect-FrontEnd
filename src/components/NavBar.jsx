@@ -22,11 +22,18 @@ const NavBar = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
-        <Link to="/feed" className="btn btn-ghost text-xl">
-          TechConnect
+        <Link
+          to="/feed"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        >
+          <img
+            src="/tech-nexus-logo.png"
+            alt="TechNexus logo"
+            className="w-8 h-8 object-contain"
+          />
+          <span className="text-xl font-semibold">TechNexus</span>
         </Link>
       </div>
-
       <div className="flex gap-2">
         {user && (
           <>

@@ -2,15 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const feedSlice = createSlice({
   name: "feed",
-  initialState: null,
+  initialState: [],
   reducers: {
     addFeed: (state, action) => {
       return action.payload;
     },
 
     removeUserFromFeed: (state, action) => {
-      const userFeed = state.filter((user) => user._id != action.payload);
-      return userFeed;
+      return state.filter((user) => user._id !== action.payload);
     },
   },
 });

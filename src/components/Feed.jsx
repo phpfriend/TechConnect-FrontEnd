@@ -9,15 +9,11 @@ const Feed = () => {
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
 
-  const getFeed = async () => {
+  const fetchFeed = async () => {
     try {
-      if (feed) return null;
-
-      const res = await axios.get(BASE_URL + "/feed", {
+      const res = await axios.get(`${BASE_URL}/feed`, {
         withCredentials: true,
       });
-
-      console.log("fetched data:", res.data.data[0]);
       dispatch(addFeed(res.data.data));
     } catch (err) {
       console.log(err.message);
@@ -25,28 +21,22 @@ const Feed = () => {
   };
 
   useEffect(() => {
-    getFeed();
+    fetchFeed();
   }, []);
 
-  if (!feed) return;
-
-  if (feed.length <= 0)
+  if (!feed || feed.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
+      <div className="flex flex-col items-center justify-center min-h-[100vh] gap-3">
         <div className="text-6xl">👀</div>
         <h2 className="text-2xl font-semibold">You're all caught up!</h2>
-        <p className="text-base-content/50 text-sm">
-          No new users found. Check back later!
-        </p>
       </div>
     );
+  }
 
   return (
-    feed && (
-      <div className="flex justify-center my-10">
-        <UserCard user={feed[0]} />
-      </div>
-    )
+    <div className="flex justify-center items-center h-[calc(100vh-128px)] overflow-hidden bg-base-200">
+      <UserCard key={feed[0]._id} user={feed[0]} />
+    </div>
   );
 };
 
