@@ -1,22 +1,21 @@
-# frontend/Dockerfile
 # Stage 1: Build Vite React app
 FROM node:22.12.0-alpine AS build
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package*.json ./
+# Copy package files from frontend folder
+COPY frontend/package*.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the app
-COPY . .
+# Copy frontend source
+COPY frontend/. .
 
-# Build production assets
+# Build frontend
 RUN npm run build
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-# Copy Vite dist folder
+# Copy built files
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copy Nginx config
