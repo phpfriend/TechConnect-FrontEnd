@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json first for caching
 COPY package*.json ./
 
-# Install dependencies (ignore peer deps conflict)
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
 # Copy all source files
@@ -21,15 +21,14 @@ FROM nginx:alpine
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy React build output from Stage 1
-COPY --from=build /app/build /usr/share/nginx/html
+# --- THE FIX IS HERE ---
+# If Vite: use /app/dist
+# If Create React App: use /app/build
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy custom nginx config (optional)
-# Make sure nginx/default.conf exists relative to Dockerfile
+# Copy custom nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Expose port
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
