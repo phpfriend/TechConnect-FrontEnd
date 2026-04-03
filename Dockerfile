@@ -1,26 +1,24 @@
 # frontend/Dockerfile
-FROM node:22-alpine AS build
+# Stage 1: Build React app
+FROM node:22.12.0-alpine as build
 
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
-
-# Copy all frontend source code and build
 COPY . .
 RUN npm run build
 
-# Production stage
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-# Remove default nginx website
+# Remove default content
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy build output to nginx html folder
+# Copy build output
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy custom nginx config
+# Copy custom Nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
