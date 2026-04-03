@@ -10,7 +10,7 @@ const Profile = () => {
   return (
     <div className="flex justify-center gap-10 my-10">
       <EditProfile setPreviewUser={setPreviewUser} />
-      <UserCard user={previewUser || user} />
+      <UserCard user={previewUser || user} profile={"profile"} />
     </div>
   );
 };

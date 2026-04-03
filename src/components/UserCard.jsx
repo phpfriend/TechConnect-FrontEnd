@@ -5,7 +5,7 @@ import { BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, profile }) => {
   const dispatch = useDispatch();
   const cardRef = useRef(null);
   const [swipeDir, setSwipeDir] = useState(null);
@@ -88,21 +88,23 @@ const UserCard = ({ user }) => {
             </div>
 
             {/* Buttons always at bottom */}
-            <div className="card-actions justify-center gap-6 mt-4">
-              <button
-                onClick={() => swipe("left")}
-                className="btn btn-outline btn-error px-6"
-              >
-                ❌ Skip
-              </button>
+            {!profile && (
+              <div className="card-actions justify-center gap-6 mt-4">
+                <button
+                  onClick={() => swipe("left")}
+                  className="btn btn-outline btn-error px-6"
+                >
+                  ❌ Skip
+                </button>
 
-              <button
-                onClick={() => swipe("right")}
-                className="btn btn-primary px-6"
-              >
-                🔗 Connect
-              </button>
-            </div>
+                <button
+                  onClick={() => swipe("right")}
+                  className="btn btn-primary px-6"
+                >
+                  🔗 Connect
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </TinderCard>
