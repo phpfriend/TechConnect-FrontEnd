@@ -3,32 +3,31 @@ FROM node:22.12.0-alpine AS build
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json first for caching
-COPY package*.json ./
+# Accept the argument from docker-compose
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
-# Install dependencies
+# Copy package files for better caching
+COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy all source files
+# Copy source and build
 COPY . .
-
-# Build React app
 RUN npm run build
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-# Remove default nginx website
+# Clean default files
 RUN rm -rf /usr/share/nginx/html/*
 
-# --- THE FIX IS HERE ---
-# If Vite: use /app/dist
-# If Create React App: use /app/build
+# Copy build output (using 'dist' for Vite)
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy custom nginx config
+# Copy our custom SSL Nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
