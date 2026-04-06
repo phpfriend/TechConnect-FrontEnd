@@ -34,7 +34,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-[calc(100vh-128px)] overflow-hidden bg-base-200">
+    <div className="flex justify-center items-center bg-base-200 py-10">
       <UserCard key={feed[0]._id} user={feed[0]} />
     </div>
   );
