@@ -27,7 +27,7 @@ const NavBar = () => {
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <img
-            src="/tech-nexus-logo.png"
+            src="/technexuslogo.png"
             alt="TechNexus logo"
             className="w-8 h-8 object-contain"
           />
